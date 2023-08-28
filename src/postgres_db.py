@@ -35,12 +35,7 @@ class PostgresDB(Engine):
     def _create_database(self):
         self.conn.autocommit = True
 
-        self.cur.execute("SELECT datname FROM pg_catalog.pg_database WHERE datname = %s;", (self.database_name,))
-        exists = self.cur.fetchone()
-
-        if exists:
-            self.cur.execute(f"DROP DATABASE {self.database_name}")
-
+        self.cur.execute(f"DROP DATABASE IF EXISTS {self.database_name}")
         self.cur.execute(f"CREATE DATABASE {self.database_name}")
 
         self.cur.close()
